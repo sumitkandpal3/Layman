@@ -15,7 +15,7 @@ struct HomeView: View {
                     if isSearching {
                         HStack {
                             Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color.theme.textSecondary)
                             
                             TextField("Search articles...", text: $viewModel.searchText)
                                 .font(.system(size: 16, design: .default))
@@ -25,42 +25,44 @@ struct HomeView: View {
                             if !viewModel.searchText.isEmpty {
                                 Button(action: { viewModel.searchText = "" }) {
                                     Image(systemName: "xmark.circle.fill")
-                                        .foregroundColor(Color.gray.opacity(0.8))
+                                        .foregroundColor(Color.theme.textSecondary.opacity(0.8))
                                 }
                             }
                         }
                         .padding(12)
-                        .background(Color(white: 0.95))
+                        .background(Color.theme.secondaryBackground)
                         .clipShape(Capsule())
                         .transition(.opacity.combined(with: .offset(x: 20)))
                         
                         Button("Cancel") {
                             withAnimation(.spring()) {
+                                Haptics.shared.play(.light)
                                 viewModel.searchText = ""
                                 isSearching = false
                             }
                         }
                         .font(.system(size: 16, weight: .semibold, design: .default))
-                        .foregroundColor(Color(red: 0.816, green: 0.388, blue: 0.184))
+                        .foregroundColor(Color.theme.accentOrange)
                         .padding(.leading, 4)
                         
                     } else {
                         Text("Layman")
                             .font(.system(size: 32, weight: .bold, design: .default))
-                            .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                            .foregroundColor(Color.theme.textPrimary)
                         
                         Spacer()
                         
                         Button(action: {
                             withAnimation(.spring()) {
+                                Haptics.shared.play(.light)
                                 isSearching = true
                             }
                         }) {
                             Image(systemName: "magnifyingglass")
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundColor(Color(red: 0.4, green: 0.35, blue: 0.30))
+                                .foregroundColor(Color.theme.textSecondary)
                                 .frame(width: 38, height: 38)
-                                .background(Color(red: 0.918, green: 0.906, blue: 0.894))
+                                .background(Color.theme.secondaryBackground)
                                 .clipShape(Circle())
                         }
                     }
@@ -120,9 +122,9 @@ struct HomeView: View {
                                             article: article,
                                             displayTitle: viewModel.rewrittenTitles[article.id]
                                         )
-                                        // Pin card to exact GeometryReader width so image never bleeds
                                         .frame(width: geo.size.width - 40, height: 220)
-                                        .padding(.horizontal, 20)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .shadow(color: Color.theme.shadow, radius: 10, x: 0, y: 5)
                                     }
                                     .buttonStyle(ScaleButtonStyle())
                                     .tag(index)
@@ -138,8 +140,8 @@ struct HomeView: View {
                             ForEach(0..<viewModel.featuredArticles.count, id: \.self) { i in
                                 Capsule()
                                     .fill(i == selectedCarouselPage
-                                          ? Color(red: 0.816, green: 0.388, blue: 0.184)
-                                          : Color(red: 0.816, green: 0.388, blue: 0.184).opacity(0.25)
+                                          ? Color.theme.accentOrange
+                                          : Color.theme.accentOrange.opacity(0.25)
                                     )
                                     .frame(width: i == selectedCarouselPage ? 20 : 6, height: 6)
                                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedCarouselPage)
@@ -153,14 +155,14 @@ struct HomeView: View {
                     HStack {
                         Text("Today's Picks")
                             .font(.system(size: 18, weight: .bold, design: .default))
-                            .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                            .foregroundColor(Color.theme.textPrimary)
                         
                         Spacer()
                         
                         Button(action: {}) {
                             Text("View All")
                                 .font(.system(size: 14, weight: .semibold, design: .default))
-                                .foregroundColor(Color(red: 0.816, green: 0.388, blue: 0.184))
+                                .foregroundColor(Color.theme.accentOrange)
                         }
                     }
                     .padding(.horizontal, 20)
@@ -186,7 +188,7 @@ struct HomeView: View {
                 }
             }
         }
-        .background(Color(red: 0.973, green: 0.961, blue: 0.945).ignoresSafeArea())
+        .background(Color.theme.background.ignoresSafeArea())
         .onAppear {
             setupAppearance()
             if viewModel.featuredArticles.isEmpty {
@@ -198,8 +200,8 @@ struct HomeView: View {
     }
     
     private func setupAppearance() {
-        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(red: 0.816, green: 0.388, blue: 0.184, alpha: 1.0)
-        UIPageControl.appearance().pageIndicatorTintColor = UIColor(red: 0.816, green: 0.388, blue: 0.184, alpha: 0.25)
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color.theme.accentOrange)
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor(Color.theme.accentOrange.opacity(0.25))
     }
 }
 
@@ -272,8 +274,8 @@ struct FeaturedArticleCard: View {
     private var cardGradient: some View {
         LinearGradient(
             gradient: Gradient(stops: [
-                .init(color: Color(red: 0.90, green: 0.42, blue: 0.14), location: 0),
-                .init(color: Color(red: 0.62, green: 0.24, blue: 0.08), location: 1),
+                .init(color: Color.theme.accentOrange, location: 0),
+                .init(color: Color.theme.accentOrange.opacity(0.8), location: 1),
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -308,7 +310,7 @@ struct ArticleRowCard: View {
                         }
                     }
                 } else {
-                    Color(red: 0.87, green: 0.82, blue: 0.76)
+                    Color.theme.secondaryBackground
                         .frame(width: 78, height: 78)
                 }
             }
@@ -318,7 +320,7 @@ struct ArticleRowCard: View {
             // Title text — no lineLimit, grows freely
             Text(visibleTitle)
                 .font(.system(size: 15, weight: .semibold, design: .default))
-                .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                .foregroundColor(Color.theme.textPrimary)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .multilineTextAlignment(.leading)
@@ -328,7 +330,7 @@ struct ArticleRowCard: View {
                 .animation(.easeInOut(duration: 0.25), value: visibleTitle)
         }
         .padding(12)
-        .background(Color(red: 0.933, green: 0.906, blue: 0.875))
+        .background(Color.theme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 10)

@@ -16,7 +16,7 @@ struct ArticleDetailView: View {
     var body: some View {
         ZStack {
             // Warm off-white background matching screenshot
-            Color(red: 0.973, green: 0.961, blue: 0.945).ignoresSafeArea()
+            Color.theme.background.ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // Top Custom Header Bar
@@ -29,7 +29,7 @@ struct ArticleDetailView: View {
                             .font(.system(size: 15, weight: .bold))
                             .foregroundColor(Color(white: 0.45))
                             .frame(width: 40, height: 40)
-                            .background(Color(red: 0.918, green: 0.906, blue: 0.894))
+                            .background(Color.theme.secondaryBackground)
                             .clipShape(Circle())
                     }
                     
@@ -47,12 +47,12 @@ struct ArticleDetailView: View {
                     
                     // Bookmark
                     Button(action: {
-                        Haptics.shared.play(.rigid)
+                        Haptics.shared.notification(.success)
                         bookmarkVM.toggleBookmark(article: article)
                     }) {
                         Image(systemName: bookmarkVM.isSaved ? "bookmark.fill" : "bookmark")
                             .font(.system(size: 19, weight: .medium))
-                            .foregroundColor(bookmarkVM.isSaved ? Color(red: 0.816, green: 0.388, blue: 0.184) : Color(white: 0.60))
+                            .foregroundColor(bookmarkVM.isSaved ? Color.theme.accentOrange : Color(white: 0.60))
                     }
                     
                     // Share (Native iOS 16 Hook)
@@ -76,7 +76,7 @@ struct ArticleDetailView: View {
                         // 1. Headline — show rewritten title if available
                         Text(displayTitle ?? article.title)
                             .font(.system(size: 22, weight: .bold, design: .default))
-                            .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                            .foregroundColor(Color.theme.textPrimary)
                             .lineLimit(nil)
                             .multilineTextAlignment(.leading)
                             .padding(.horizontal, 20)
@@ -101,7 +101,7 @@ struct ArticleDetailView: View {
                             .padding(.horizontal, 20)
                         } else {
                             RoundedRectangle(cornerRadius: 18)
-                                .fill(Color(white: 0.88))
+                                .fill(Color.theme.secondaryBackground)
                                 .frame(height: 220)
                                 .frame(maxWidth: .infinity)
                                 .padding(.horizontal, 20)
@@ -116,7 +116,7 @@ struct ArticleDetailView: View {
                                         let chunk = chunksToRender[index]
                                         Text(chunk)
                                             .font(.system(size: 16, weight: .regular, design: .rounded))
-                                            .foregroundColor(Color(red: 0.38, green: 0.35, blue: 0.33))
+                                            .foregroundColor(Color.theme.textSecondary)
                                             .lineSpacing(6)
                                             .lineLimit(nil)
                                             .minimumScaleFactor(0.9)
@@ -124,9 +124,9 @@ struct ArticleDetailView: View {
                                             .frame(maxWidth: .infinity, alignment: .topLeading)
                                             .padding(22)
                                             .frame(height: 190)
-                                            .background(Color.white.opacity(0.9))
+                                            .background(Color.theme.cardBackground.opacity(0.9))
                                             .clipShape(RoundedRectangle(cornerRadius: 20))
-                                            .shadow(color: Color.black.opacity(0.04), radius: 6, x: 0, y: 2)
+                                            .shadow(color: Color.theme.shadow, radius: 6, x: 0, y: 2)
                                             .padding(.horizontal, 20)
                                             .tag(index)
                                     }
@@ -138,7 +138,7 @@ struct ArticleDetailView: View {
                                     ForEach(0..<chunksToRender.count, id: \.self) { i in
                                         if i == currentPage {
                                             Capsule()
-                                                .fill(Color(red: 0.816, green: 0.388, blue: 0.184))
+                                                .fill(Color.theme.accentOrange)
                                                 .frame(width: 20, height: 6)
                                         } else {
                                             Circle()
@@ -173,7 +173,7 @@ struct ArticleDetailView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(Color(red: 0.816, green: 0.388, blue: 0.184))
+                    .background(Color.theme.accentOrange)
                     .clipShape(Capsule())
                 }
                 .padding(.horizontal, 24)
@@ -188,6 +188,7 @@ struct ArticleDetailView: View {
         }
         .onAppear {
             setupAppearance()
+            StreakService.shared.updateStreak()
         }
         .task {
             await bookmarkVM.checkInitialState(articleUrl: article.url)
@@ -195,7 +196,7 @@ struct ArticleDetailView: View {
     }
     
     private func setupAppearance() {
-        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(red: 0.816, green: 0.388, blue: 0.184, alpha: 1.0)
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(Color.theme.accentOrange)
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray.withAlphaComponent(0.5)
     }
 }

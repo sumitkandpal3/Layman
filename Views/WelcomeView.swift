@@ -3,24 +3,30 @@ import SwiftUI
 struct WelcomeView: View {
     @State private var navigateToLogin = false
     
-    let textDark    = Color(red: 0.13, green: 0.11, blue: 0.10)
-    let accentTerra = Color(red: 0.816, green: 0.388, blue: 0.184)
-    let buttonTerra = Color(red: 0.780, green: 0.380, blue: 0.200)
+    // Dynamic colors from theme
+    private var textDark: Color    { Color.theme.textPrimary }
+    private var accentTerra: Color { Color.theme.accentOrange }
+    private var buttonTerra: Color { Color.theme.accentOrange }
+    
+    // Dynamic Gradient for Welcome screen
+    private var welcomeGradient: RadialGradient {
+        RadialGradient(
+            gradient: Gradient(stops: [
+                .init(color: Color.theme.background, location: 0.0),
+                .init(color: Color.theme.accentOrange.opacity(0.15), location: 0.55),
+                .init(color: Color.theme.accentOrange.opacity(0.35), location: 1.0),
+            ]),
+            center: .center,
+            startRadius: 10,
+            endRadius: 420
+        )
+    }
     
     var body: some View {
         ZStack {
             // Background: radial warm peach — bright edges, near-white soft center
-            RadialGradient(
-                gradient: Gradient(stops: [
-                    .init(color: Color(red: 0.98, green: 0.95, blue: 0.90), location: 0.0),  // soft white center
-                    .init(color: Color(red: 0.95, green: 0.80, blue: 0.68), location: 0.55), // warm peach mid
-                    .init(color: Color(red: 0.91, green: 0.67, blue: 0.52), location: 1.0),  // deep peach edge
-                ]),
-                center: .center,
-                startRadius: 10,
-                endRadius: 420
-            )
-            .ignoresSafeArea()
+            welcomeGradient
+                .ignoresSafeArea()
             
             VStack(spacing: 0) {
                 // ── "Layman" title ──────────────────────────────

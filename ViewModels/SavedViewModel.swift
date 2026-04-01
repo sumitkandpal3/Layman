@@ -21,8 +21,12 @@ class SavedViewModel: ObservableObject {
         do {
             let fetched = try await supabaseService.fetchSavedArticles()
             self.savedArticles = fetched
+            // Update the local cache for offline reading
+            OfflineService.shared.save(articles: fetched)
         } catch {
             print("Failed to fetch saved articles: \(error.localizedDescription)")
+            // Fallback to local cache/offline mode
+            self.savedArticles = OfflineService.shared.fetch()
         }
         isLoading = false
     }

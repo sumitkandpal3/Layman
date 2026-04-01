@@ -10,8 +10,8 @@ struct SplashView: View {
     // Show destination
     @State private var showMain: Bool        = false
 
-    // The app's warm cream — permanent base so there's NEVER a dark flash
-    private let cream = Color(red: 0.973, green: 0.961, blue: 0.945)
+    // Use theme background as the foundation
+    private var cream: Color { Color.theme.background }
 
     var body: some View {
         ZStack {

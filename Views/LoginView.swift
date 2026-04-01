@@ -6,49 +6,44 @@ struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
 
     var body: some View {
-        VStack(spacing: 24) {
-            // Header
-            VStack(spacing: 8) {
+        VStack(spacing: 32) {
+            // Header: Centered layout to match Profile title design
+            VStack(spacing: 12) {
                 Text("Layman")
-                    .font(.theme.title)
-                    .foregroundColor(Color.theme.textInfo)
+                    .font(.system(size: 32, weight: .bold, design: .rounded))
+                    .foregroundColor(Color.theme.textPrimary)
                 
-                Text(viewModel.isLoginMode ? "Welcome back" : "Create an account")
-                    .font(.theme.subtitle)
-                    .foregroundColor(.gray)
+                Text(viewModel.isLoginMode ? "Welcome back, friend" : "Create a new account")
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                    .foregroundColor(Color.theme.textSecondary)
             }
-            .padding(.top, 40)
+            .padding(.top, 60)
             
             // Error Message
             if let error = viewModel.errorMessage {
                 Text(error)
-                    .font(.theme.bodyText)
-                    .foregroundColor(.red)
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundColor(Color.theme.destructive)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal)
+                    .padding(.horizontal, 32)
             }
             
-            // Input Fields
-            VStack(spacing: 16) {
+            // Input Fields: Using the centralized themeField()
+            VStack(spacing: 18) {
                 TextField("Email address", text: $viewModel.email)
                     .keyboardType(.emailAddress)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .softShadow()
+                    .themeField()
                 
                 SecureField("Password", text: $viewModel.password)
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .softShadow()
+                    .themeField()
             }
             .padding(.horizontal, 24)
             
             // Action Button
             Button(viewModel.isLoginMode ? "Log In" : "Sign Up") {
+                Haptics.shared.play(.medium)
                 Task {
                     await viewModel.authenticate(using: authViewModel)
                 }
@@ -56,6 +51,7 @@ struct LoginView: View {
             .buttonStyle(PillButtonStyle())
             .disabled(viewModel.isLoading)
             .opacity(viewModel.isLoading ? 0.7 : 1.0)
+            .padding(.horizontal, 24)
             .padding(.top, 8)
             
             // Loading Indicator

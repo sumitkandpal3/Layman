@@ -58,10 +58,11 @@ class AIService {
 
     func generateSuggestions(for article: Article) async throws -> [String] {
         let systemPrompt = "You are Layman, a friendly buddy who explains news simply. Talk like you're chatting with a friend over coffee. No big words or technical jargon allowed!"
+        let contextDescription = (article.description ?? "").prefix(2000)
         let userPrompt = """
         Read this article:
         Title: \(article.title)
-        Description: \(article.description ?? "")
+        Description: \(contextDescription)
         
         Give me exactly 3 short, catchy questions a regular person would ask about this. 
         Make them sound natural and curious. ONLY return the 3 questions separated by a single newline. No numbers or bullets.

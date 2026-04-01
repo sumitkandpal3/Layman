@@ -1,5 +1,7 @@
 import SwiftUI
 import Combine
+import Supabase
+import Auth
 
 @MainActor
 class BookmarkViewModel: ObservableObject {
@@ -14,6 +16,8 @@ class BookmarkViewModel: ObservableObject {
             self.isSaved = try await supabaseService.isArticleSaved(articleUrl: articleUrl)
         } catch {
             print("Failed to query initial bookmark state: \(error.localizedDescription)")
+            // If offline, check our local cache to see if the article URL exists
+            self.isSaved = OfflineService.shared.isSavedOffline(articleUrl: articleUrl)
         }
     }
     
@@ -33,8 +37,22 @@ class BookmarkViewModel: ObservableObject {
                         imageUrl: article.image,
                         articleUrl: article.url
                     )
+                    
+                    // Immediately add to local cache for offline reading
+                    if let session = try? await supabaseService.restoreSession() {
+                        let savedArticle = SavedArticle(
+                            user_id: session.user.id,
+                            article_title: article.title,
+                            article_description: article.description,
+                            image_url: article.image,
+                            article_url: article.url
+                        )
+                        OfflineService.shared.add(article: savedArticle)
+                    }
                 } else {
                     try await supabaseService.removeSavedArticle(articleUrl: article.url)
+                    // Immediately remove from local cache for offline reading
+                    OfflineService.shared.remove(articleUrl: article.url)
                 }
             } catch {
                 print("Failed to sync bookmark: \(error.localizedDescription)")

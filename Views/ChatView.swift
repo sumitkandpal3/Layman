@@ -11,12 +11,12 @@ struct ChatView: View {
         _viewModel = StateObject(wrappedValue: ChatViewModel(article: article))
     }
     
-    // Exact colors from screenshot
-    let bgColor        = Color(red: 0.973, green: 0.961, blue: 0.945) // warm off-white
-    let botBubble      = Color(red: 0.906, green: 0.859, blue: 0.820) // warm tan — bot bubble
-    let userBubble     = Color(red: 0.933, green: 0.906, blue: 0.875) // lighter beige — user bubble
-    let orangeAccent   = Color(red: 0.816, green: 0.388, blue: 0.184) // brand orange
-    let suggestionPill = Color(red: 0.620, green: 0.275, blue: 0.133) // darker terracotta pills
+    // Theme dynamic colors
+    private var bgColor: Color        { Color.theme.background }
+    private var botBubble: Color      { Color.theme.cardBackground }
+    private var userBubble: Color     { Color.theme.secondaryBackground }
+    private var orangeAccent: Color   { Color.theme.accentOrange }
+    private var suggestionPill: Color { Color.theme.suggestionPill }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -111,11 +111,12 @@ struct ChatView: View {
             HStack(spacing: 14) {
                 TextField("Type your question...", text: $inputText)
                     .font(.system(size: 16, design: .rounded))
-                    .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                    .foregroundColor(Color.theme.textPrimary)
                     .focused($isFocused)
                     .submitLabel(.send)
                     .onSubmit {
                         guard !inputText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                        Haptics.shared.play(.medium)
                         viewModel.sendMessage(inputText)
                         inputText = ""
                     }
@@ -143,7 +144,7 @@ struct ChatView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
-            .background(Color(red: 0.918, green: 0.906, blue: 0.894))
+            .background(Color.theme.secondaryBackground)
             .clipShape(Capsule())
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
@@ -174,7 +175,7 @@ struct BotMessageBubble: View {
             
             Text(text)
                 .font(.system(size: 15, weight: .regular, design: .rounded))
-                .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                .foregroundColor(Color.theme.textPrimary)
                 .lineSpacing(4)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
@@ -198,16 +199,15 @@ struct UserMessageBubble: View {
             
             Text(text)
                 .font(.system(size: 15, weight: .regular, design: .rounded))
-                .foregroundColor(Color(red: 0.118, green: 0.098, blue: 0.086))
+                .foregroundColor(Color.theme.textPrimary)
                 .lineSpacing(4)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
                 .background(bubbleColor)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             
-            // User avatar — orange person icon, no stroke fill, just circle outline
             Circle()
-                .fill(Color(red: 0.933, green: 0.906, blue: 0.875))
+                .fill(Color.theme.cardBackground)
                 .frame(width: 32, height: 32)
                 .overlay(
                     Image(systemName: "person.fill")
