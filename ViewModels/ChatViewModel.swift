@@ -31,7 +31,7 @@ class ChatViewModel: ObservableObject {
                 }
             }
         } catch {
-            print("Gemini Suggestion Load Error: \(error)")
+            print("Groq Suggestion Load Error: \(error)")
             withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                 self.suggestions = ["What does this mean?", "Any key takeaways?", "Why is this relevant?"]
             }
@@ -57,7 +57,7 @@ class ChatViewModel: ObservableObject {
                     messages.append(botMsg)
                     isTyping = false
                 }
-            } catch GeminiError.quotaExceeded {
+            } catch GroqError.quotaExceeded {
                 let msg = ChatMessage(content: "I've hit my daily AI limit. Please try again in a little while! 🙏", isUser: false)
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                     messages.append(msg)
@@ -69,7 +69,7 @@ class ChatViewModel: ObservableObject {
                     messages.append(errorMsg)
                     isTyping = false
                 }
-                print("Gemini Logic Error: \(error.localizedDescription)")
+                print("Groq Logic Error: \(error.localizedDescription)")
             }
         }
     }

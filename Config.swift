@@ -22,9 +22,9 @@ enum Config {
         return key
     }
     
-    static var geminiApiKey: String {
-        guard let key = Bundle.main.object(forInfoDictionaryKey: "GEMINI_API_KEY") as? String else {
-            fatalError("GEMINI_API_KEY not found in Info.plist")
+    static var groqApiKey: String {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "GROQ_API_KEY") as? String else {
+            fatalError("GROQ_API_KEY not found in Info.plist")
         }
         return key
     }

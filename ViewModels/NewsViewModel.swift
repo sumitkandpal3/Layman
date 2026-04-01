@@ -60,8 +60,8 @@ class NewsViewModel: ObservableObject {
             withAnimation(.easeInOut(duration: 0.3)) {
                 self.rewrittenTitles.merge(rewritten) { _, new in new }
             }
-        } catch GeminiError.quotaExceeded {
-            print("Headline rewrite skipped: Gemini quota exceeded")
+        } catch GroqError.quotaExceeded {
+            print("Headline rewrite skipped: Groq quota exceeded")
         } catch {
             print("Headline rewrite error: \(error.localizedDescription)")
         }
