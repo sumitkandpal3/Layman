@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>GEMINI_API_KEY</key>
+	<string>AIzaSyAMDEqAjQchfYXLoYDikumkn6fI-SReHIQ</string>
+	<key>NEWS_API_KEY</key>
+	<string>pub_d25a69db9a604ea3bd437dfcea7217f9</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoeWxkZG5mcGpteWt2aHhucWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMTY5NDAsImV4cCI6MjA5MDU5Mjk0MH0.2Qcx7RaiJAyoP3lZcLdUrc8dwjoBNp4z59_wAVcT9Hc</string>
+	<key>SUPABASE_URL</key>
+	<string>https://bhylddnfpjmykvhxnqbr.supabase.co</string>
+</dict>
+</plist>
