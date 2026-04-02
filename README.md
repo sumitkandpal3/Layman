@@ -150,25 +150,16 @@ The app uses Groq API with LLaMA 3.1 model to:
 ## 📸 Screenshots
 
 
-### Welcome Screen
+<p align="center">
+  <img src="screenshots/welcome.png" width="200"/>
+  <img src="screenshots/home.png" width="200"/>
+  <img src="screenshots/detail.png" width="200"/>
+</p>
 
-![Welcome](screenshots/welcome.png)
-
-### Home Screen
-
-![Home](screenshots/home.png)
-
-### Article Detail
-
-![Detail](screenshots/detail.png)
-
-### Chat
-
-![Chat](screenshots/chat.png)
-
-### Saved
-
-![Saved](screenshots/saved.png)
+<p align="center">
+  <img src="screenshots/chat.png" width="200"/>
+  <img src="screenshots/saved.png" width="200"/>
+</p>
 
 ---
 
